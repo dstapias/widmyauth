@@ -20,5 +20,11 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.inicio),
+    path('autinit/', views.inicio),
+    path('adendasinit/', views.widmy),
+    path('iainit/', views.ia),
+    path('autWidmy/', views.widmy),
     path('autenticacion/', include('autenticacion.urls')),
+    path(r'', include('django.contrib.auth.urls')),
+    path(r'', include('social_django.urls')),
 ]

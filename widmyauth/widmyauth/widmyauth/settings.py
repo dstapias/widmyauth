@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import logging
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-b9xgxgj+4pea2nuiltm@ud&m72e@)_fyw18ra57(iqmm4w+vy9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'widmyauth',
     'autenticacion',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -77,8 +79,12 @@ WSGI_APPLICATION = 'widmyauth.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'autenticacion_db',
+        'USER': 'autenticacion_user',
+        'PASSWORD': '1234',
+        'HOST': '10.128.0.8',
+        'PORT': '5432',
     }
 }
 
@@ -125,3 +131,28 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#AUTH0
+LOGIN_URL = "login/auth0"
+LOGIN_REDIRECT_URL = "http://34.29.7.111:8000/"
+LOGOUT_REDIRECT_URL = "https://owca.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F35.239.223.153:8080"
+
+SOCIAL_AUTH_AUTH0_CALLBACK_URL = 'http://34.29.7.111:8000/complete/auth0/'
+SOCIAL_AUTH_TRAILING_SLASH = False # Remove end slash from routes
+SOCIAL_AUTH_AUTH0_DOMAIN = 'owca.us.auth0.com'
+SOCIAL_AUTH_AUTH0_KEY = '4YtZcWzUx1EqZkBC5FU4XSOZ70FzGWog'
+SOCIAL_AUTH_AUTH0_SECRET = 'BnoI0twfj8u06j6M9_2j59LBGAK-RA5h8pVkx5EB6V7D0v5nx8fpdpp0NUudzmp3'
+SOCIAL_AUTH_LOGGING_LEVEL = logging.DEBUG
+
+
+SOCIAL_AUTH_AUTH0_SCOPE = [
+    'openid',
+    'profile',
+    'email',
+    'role',
+]
+
+AUTHENTICATION_BACKENDS = {
+    'widmyauth.auth0backend.Auth0',
+    'django.contrib.auth.backends.ModelBackend',
+}
